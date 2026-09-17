@@ -1,0 +1,4 @@
+# Cloudflare Pages configuration for the frontend
+# Deploy with: wrangler pages deploy ./frontend/out -c wrangler-pages.toml
+
+name = "gym-meliora"
