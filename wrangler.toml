@@ -1,8 +1,8 @@
-name = "gym-meliora-worker"
+name = "gym-meliora"
 compatibility_date = "2024-09-23"
 main = "src/worker.js"
 
-# Environment variables
+# Environment variables for different deployment targets
 [env.production]
 vars = { BACKEND_URL = "https://api.gym-meliora.com", FRONTEND_URL = "https://gym-meliora.com" }
 
@@ -11,8 +11,3 @@ vars = { BACKEND_URL = "https://staging-api.gym-meliora.com", FRONTEND_URL = "ht
 
 [env.development]
 vars = { BACKEND_URL = "http://localhost:5000", FRONTEND_URL = "http://localhost:3000" }
-
-# Routes for the worker - handles share.gym-meliora.com subdomain
-[[routes]]
-pattern = "share.gym-meliora.com/*"
-zone_name = "gym-meliora.com"

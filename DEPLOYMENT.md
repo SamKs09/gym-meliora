@@ -33,7 +33,22 @@ wrangler deploy --env staging
 
 This deploys the short URL redirect worker (`src/worker.js`).
 
-### Step 3: Deploy Frontend to Pages
+### Step 3: Configure Worker Routes (Cloudflare Dashboard)
+
+After deploying the worker, configure routes:
+
+1. **Cloudflare Dashboard** → Your Domain → Workers Routes
+2. **Add Route:**
+   - Pattern: `share.gym-meliora.com/*`
+   - Worker: `gym-meliora` (or your worker name)
+   - Zone: `gym-meliora.com`
+
+Or use subdomain routing:
+   - Pattern: `*/share/*`
+   - Worker: `gym-meliora`
+   - No zone required (routes to any domain)
+
+### Step 4: Deploy Frontend to Pages
 
 ```bash
 # Requires frontend/out directory to exist (from step 1)
