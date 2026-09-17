@@ -66,6 +66,9 @@ mongoose.connect(mongoURI, {
 const Booking = require('./models/Booking');
 const Trainer = require('./models/Trainer');
 
+// Import Routes
+const shareLinksRouter = require('./routes/shareLinks');
+
 // --- API ROUTES ---
 
 // 1. Health & Status Check
@@ -155,6 +158,9 @@ app.get('/api/admin/bookings', async (req, res) => {
     res.status(500).json({ error: 'Server error retrieving bookings list' });
   }
 });
+
+// 5. Share Links API Routes
+app.use('/api/share-links', shareLinksRouter);
 
 // Base Route
 app.get('/', (req, res) => {
