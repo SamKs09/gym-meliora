@@ -2,6 +2,10 @@ name = "gym-meliora"
 compatibility_date = "2024-09-23"
 main = "src/worker.js"
 
+[assets]
+directory = "./frontend/out"
+binding = "ASSETS"
+
 # Environment variables for different deployment targets
 [env.production]
 vars = { BACKEND_URL = "https://api.gym-meliora.com", FRONTEND_URL = "https://gym-meliora.com" }

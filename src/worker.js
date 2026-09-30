@@ -1,7 +1,4 @@
-// Cloudflare Worker for handling short URLs and tracking
-const BACKEND_URL = 'https://gym-meliora-api.example.com'; // Update with your actual backend URL
-const FRONTEND_URL = 'https://gym-meliora.com'; // Update with your actual frontend URL
-
+// Cloudflare Worker for handling short URLs, tracking, and static frontend serving
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -17,8 +14,11 @@ export default {
           userAgent: request.headers.get('user-agent') || 'unknown'
         };
 
+        const backendUrl = env?.BACKEND_URL || 'https://gym-meliora-api.example.com';
+        const frontendUrl = env?.FRONTEND_URL || url.origin;
+
         ctx.waitUntil(
-          fetch(`${BACKEND_URL}/api/share-links/track-click/${path}`, {
+          fetch(`${backendUrl}/api/share-links/track-click/${path}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(trackingData)
@@ -27,7 +27,7 @@ export default {
 
         // Redirect to frontend with referral code
         return Response.redirect(
-          `${FRONTEND_URL}/?ref=${path}`,
+          `${frontendUrl}/?ref=${path}`,
           302
         );
       } catch (error) {
@@ -36,7 +36,11 @@ export default {
       }
     }
 
-    // If not a short code, return 404
+    // Serve Next.js static assets from ./frontend/out
+    if (env.ASSETS) {
+      return env.ASSETS.fetch(request);
+    }
+
     return new Response('Not found', { status: 404 });
   }
 };
