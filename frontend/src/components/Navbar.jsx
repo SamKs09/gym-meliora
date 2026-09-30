@@ -75,6 +75,7 @@ export default function Navbar({ lang, setLang, t }) {
             { label: t.zones, href: "#facilities" },
             { label: t.tiers, href: "#memberships" },
             { label: t.vanguard, href: "#trainers" },
+            { label: t.schedule || "Planning", href: "#schedule" },
             { label: t.gallery, href: "#gallery" },
             { label: t.contact, href: "#contact" },
           ].map((link) => (
@@ -218,6 +219,7 @@ export default function Navbar({ lang, setLang, t }) {
           { label: t.zones, href: "#facilities" },
           { label: t.tiers, href: "#memberships" },
           { label: t.vanguard, href: "#trainers" },
+          { label: t.schedule || "Planning", href: "#schedule" },
           { label: t.gallery, href: "#gallery" },
           { label: t.contact, href: "#contact" },
         ].map((link) => (

@@ -15,6 +15,7 @@ import Faq from "@/components/Faq";
 import ThreeBackgroundCanvas from "@/components/ThreeBackgroundCanvas";
 import ThreeEquipmentShowcase from "@/components/ThreeEquipmentShowcase";
 import Gsap3dController from "@/components/Gsap3dController";
+import ClassSchedule from "@/components/ClassSchedule";
 import { translations } from "@/translations";
 
 export default function Home() {
@@ -167,6 +168,9 @@ export default function Home() {
 
         {/* VANGUARD / TRAINERS SECTION */}
         <Vanguard t={t.vanguard} lang={lang} />
+
+        {/* PLANNING DES COURS / CLASS SCHEDULE SECTION */}
+        <ClassSchedule lang={lang} />
 
         {/* TESTIMONIALS SECTION */}
         <section id="testimonials" className="section-padding" style={{ backgroundColor: "#080808" }}>

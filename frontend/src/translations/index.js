@@ -7,6 +7,7 @@ export const translations = {
       zones: "Zones",
       tiers: "Tiers",
       vanguard: "Vanguard",
+      schedule: "Planning",
       gallery: "Gallery",
       contact: "Contact",
       join: "Join The Forge"
@@ -179,6 +180,7 @@ export const translations = {
       zones: "Zones",
       tiers: "Tarifs",
       vanguard: "L'Élite",
+      schedule: "Planning",
       gallery: "Galerie",
       contact: "Contact",
       join: "Rejoindre"
@@ -351,6 +353,7 @@ export const translations = {
       zones: "البلايص",
       tiers: "الاشتراكات",
       vanguard: "المدربين",
+      schedule: "البرنامج",
       gallery: "التصاور",
       contact: "الاتصال",
       join: "أدخل للفورجة"
