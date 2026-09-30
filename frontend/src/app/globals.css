@@ -566,3 +566,28 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* --- CLASS SCHEDULE RESPONSIVE RULES --- */
+.mobile-day-tabs,
+.mobile-view-toggle,
+.mobile-card-stack {
+  display: none;
+}
+@media (max-width: 900px) {
+  .mobile-day-tabs {
+    display: flex !important;
+  }
+  .mobile-view-toggle {
+    display: flex !important;
+  }
+  .mobile-card-stack {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .schedule-table-wrapper {
+    display: none !important;
+  }
+  .schedule-table-wrapper.force-show-mobile {
+    display: block !important;
+  }
+}
+

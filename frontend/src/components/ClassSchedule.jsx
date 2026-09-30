@@ -436,7 +436,6 @@ export default function ClassSchedule({ lang = "fr" }) {
         <div
           className="mobile-view-toggle"
           style={{
-            display: "none",
             alignItems: "center",
             justifyContent: "space-between",
             marginBottom: "1.25rem",
@@ -474,7 +473,6 @@ export default function ClassSchedule({ lang = "fr" }) {
         <div
           className="mobile-day-tabs"
           style={{
-            display: "none",
             gap: "0.4rem",
             overflowX: "auto",
             WebkitOverflowScrolling: "touch",
@@ -523,7 +521,7 @@ export default function ClassSchedule({ lang = "fr" }) {
 
         {/* MOBILE CARD LIST VIEW (Displayed on mobile when showFullGridMobile is false) */}
         {!showFullGridMobile && (
-          <div className="mobile-card-stack" style={{ display: "none" }}>
+          <div className="mobile-card-stack">
             {mobileClasses.length === 0 ? (
               <div
                 style={{
@@ -938,12 +936,22 @@ export default function ClassSchedule({ lang = "fr" }) {
         </div>
       </div>
 
-      <style jsx>{`
+      <style jsx global>{`
+        .mobile-day-tabs,
+        .mobile-view-toggle,
+        .mobile-card-stack {
+          display: none;
+        }
         @media (max-width: 900px) {
-          .mobile-day-tabs,
-          .mobile-view-toggle,
+          .mobile-day-tabs {
+            display: flex !important;
+          }
+          .mobile-view-toggle {
+            display: flex !important;
+          }
           .mobile-card-stack {
             display: flex !important;
+            flex-direction: column !important;
           }
           .schedule-table-wrapper {
             display: none !important;

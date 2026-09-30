@@ -10,6 +10,10 @@ export default function HeroScrollVideo() {
     const container = containerRef.current;
     if (!video || !container) return;
 
+    let targetTime = 0;
+    let currentTime = 0;
+    let isSeeking = false;
+    let animationFrameId = null;
     let isUserScrolling = false;
     let scrollTimeout = null;
 
