@@ -15,7 +15,7 @@ export default function ThreeHeroBackground() {
     // 1. Scene & Camera
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
-    camera.position.set(0, 0, 8);
+    camera.position.set(0, 0, 7.5);
 
     // 2. WebGL Renderer
     const renderer = new THREE.WebGLRenderer({
@@ -26,110 +26,139 @@ export default function ThreeHeroBackground() {
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.1;
+    renderer.toneMappingExposure = 1.15;
     container.appendChild(renderer.domElement);
 
-    // 3. Lighting (Warm Gold & Cool Rim Studio)
-    const ambientLight = new THREE.AmbientLight(0x151515, 1.5);
+    // 3. Dynamic Studio Lighting
+    const ambientLight = new THREE.AmbientLight(0x181818, 1.8);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xffdfa8, 3.2);
-    keyLight.position.set(4, 5, 5);
-    scene.add(keyLight);
+    // Dynamic warm gold mouse spotlight that highlights muscle contours
+    const mouseSpotlight = new THREE.PointLight(0xe5c89f, 4.5, 14);
+    mouseSpotlight.position.set(0, 1, 3.5);
+    scene.add(mouseSpotlight);
 
-    const rimLight = new THREE.DirectionalLight(0x6080a0, 2.0);
-    rimLight.position.set(-5, -3, -4);
-    scene.add(rimLight);
+    // Cool titanium rim light from upper left
+    const coolRimLight = new THREE.DirectionalLight(0x7090b0, 2.2);
+    coolRimLight.position.set(-6, 4, -2);
+    scene.add(coolRimLight);
 
-    const accentLight = new THREE.PointLight(0xc5a880, 2.5, 10);
-    accentLight.position.set(0, 1, 3);
-    scene.add(accentLight);
+    // Warm key light from right
+    const warmKeyLight = new THREE.DirectionalLight(0xc5a880, 2.0);
+    warmKeyLight.position.set(6, -2, 2);
+    scene.add(warmKeyLight);
 
-    // 4. Kinetic 3D Sculpture Group
-    const sculptureGroup = new THREE.Group();
-    scene.add(sculptureGroup);
+    // 4. Hero Main 3D Group
+    const heroGroup = new THREE.Group();
+    scene.add(heroGroup);
 
-    // Core Luxury Torus Knot
-    const coreGeo = new THREE.TorusKnotGeometry(1.4, 0.38, 160, 32, 2, 3);
-    const coreMat = new THREE.MeshStandardMaterial({
-      color: 0xc5a880,
-      metalness: 0.9,
-      roughness: 0.22,
-      wireframe: false,
-    });
-    const coreMesh = new THREE.Mesh(coreGeo, coreMat);
-    sculptureGroup.add(coreMesh);
+    // Soft Radial Feather Alpha Map for Seamless Blending
+    const alphaCanvas = document.createElement("canvas");
+    alphaCanvas.width = 512;
+    alphaCanvas.height = 512;
+    const alphaCtx = alphaCanvas.getContext("2d");
+    if (alphaCtx) {
+      const grad = alphaCtx.createRadialGradient(256, 256, 140, 256, 256, 256);
+      grad.addColorStop(0, "rgba(255, 255, 255, 1)");
+      grad.addColorStop(0.65, "rgba(255, 255, 255, 0.95)");
+      grad.addColorStop(0.9, "rgba(255, 255, 255, 0.4)");
+      grad.addColorStop(1, "rgba(255, 255, 255, 0)");
+      alphaCtx.fillStyle = grad;
+      alphaCtx.fillRect(0, 0, 512, 512);
+    }
+    const alphaTexture = new THREE.CanvasTexture(alphaCanvas);
 
-    // Subtle Wireframe Ghost overlay for architectural tech feel
-    const wireMat = new THREE.MeshBasicMaterial({
-      color: 0xffffff,
-      wireframe: true,
+    // 5. 3D Athlete Mesh with Cylindrical Curvature
+    const textureLoader = new THREE.TextureLoader();
+    const athleteTexture = textureLoader.load("/hero-athlete.png");
+    athleteTexture.generateMipmaps = true;
+    athleteTexture.minFilter = THREE.LinearMipmapLinearFilter;
+
+    // Plane geometry with 16:9 ratio (width 7.2, height 4.05) with 48 subdivisions for 3D curved warp
+    const athleteGeo = new THREE.PlaneGeometry(7.4, 4.16, 48, 48);
+
+    // Apply gentle curved wrap to create 3D IMAX perspective
+    const posAttribute = athleteGeo.attributes.position;
+    for (let i = 0; i < posAttribute.count; i++) {
+      const x = posAttribute.getX(i);
+      const curve = Math.pow(x / 3.7, 2) * 0.4;
+      posAttribute.setZ(i, -curve);
+    }
+    athleteGeo.computeVertexNormals();
+
+    const athleteMat = new THREE.MeshStandardMaterial({
+      map: athleteTexture,
+      alphaMap: alphaTexture,
       transparent: true,
-      opacity: 0.08,
+      opacity: 0.92,
+      roughness: 0.4,
+      metalness: 0.15,
+      side: THREE.DoubleSide,
     });
-    const wireMesh = new THREE.Mesh(coreGeo, wireMat);
-    wireMesh.scale.setScalar(1.015);
-    sculptureGroup.add(wireMesh);
 
-    // Orbital Ring 1 (Gold)
-    const ring1Geo = new THREE.TorusGeometry(2.6, 0.035, 16, 120);
-    const ring1Mat = new THREE.MeshStandardMaterial({
+    const athleteMesh = new THREE.Mesh(athleteGeo, athleteMat);
+    athleteMesh.position.set(0, 0.1, 0);
+    heroGroup.add(athleteMesh);
+
+    // 6. Halo of Excellence: 3D Orbital Rings Behind the Athlete
+    const haloGroup = new THREE.Group();
+    haloGroup.position.set(0, 0.3, -0.6);
+    heroGroup.add(haloGroup);
+
+    // Inner Gold Halo Ring
+    const halo1Geo = new THREE.TorusGeometry(2.3, 0.025, 16, 100);
+    const halo1Mat = new THREE.MeshStandardMaterial({
       color: 0xd4af37,
       metalness: 0.95,
       roughness: 0.15,
     });
-    const ring1 = new THREE.Mesh(ring1Geo, ring1Mat);
-    ring1.rotation.x = Math.PI / 3;
-    sculptureGroup.add(ring1);
+    const halo1 = new THREE.Mesh(halo1Geo, halo1Mat);
+    halo1.rotation.x = Math.PI / 6;
+    haloGroup.add(halo1);
 
-    // Orbital Ring 2 (Obsidian Chrome)
-    const ring2Geo = new THREE.TorusGeometry(3.0, 0.025, 16, 120);
-    const ring2Mat = new THREE.MeshStandardMaterial({
-      color: 0x333333,
+    // Outer Chrome Kinetic Ring
+    const halo2Geo = new THREE.TorusGeometry(2.8, 0.018, 16, 100);
+    const halo2Mat = new THREE.MeshStandardMaterial({
+      color: 0x444444,
       metalness: 0.98,
       roughness: 0.1,
     });
-    const ring2 = new THREE.Mesh(ring2Geo, ring2Mat);
-    ring2.rotation.y = Math.PI / 4;
-    sculptureGroup.add(ring2);
+    const halo2 = new THREE.Mesh(halo2Geo, halo2Mat);
+    halo2.rotation.y = Math.PI / 4;
+    haloGroup.add(halo2);
 
-    // Orbital Ring 3 (Tilted Equatorial Gold)
-    const ring3Geo = new THREE.TorusGeometry(2.2, 0.02, 16, 100);
-    const ring3 = new THREE.Mesh(ring3Geo, ring1Mat);
-    ring3.rotation.x = -Math.PI / 4;
-    ring3.rotation.z = Math.PI / 6;
-    sculptureGroup.add(ring3);
+    // Tilted Equatorial Accent Ring
+    const halo3Geo = new THREE.TorusGeometry(3.3, 0.015, 16, 120);
+    const halo3 = new THREE.Mesh(halo3Geo, halo1Mat);
+    halo3.rotation.x = -Math.PI / 4;
+    halo3.rotation.z = Math.PI / 5;
+    haloGroup.add(halo3);
 
-    // 5. Floating Dust / Energy Particles
-    const particleCount = 700;
+    // 7. Depth Particles (Floating in FRONT and BEHIND the athlete)
+    const particleCount = 650;
     const particleGeo = new THREE.BufferGeometry();
     const particlePositions = new Float32Array(particleCount * 3);
-    const particleScales = new Float32Array(particleCount);
 
     for (let i = 0; i < particleCount; i++) {
-      const radius = 2.5 + Math.random() * 5.0;
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.acos(2 * Math.random() - 1);
-
-      particlePositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
-      particlePositions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
-      particlePositions[i * 3 + 2] = radius * Math.cos(phi);
-      particleScales[i] = Math.random() * 0.04 + 0.01;
+      particlePositions[i * 3] = (Math.random() - 0.5) * 12;
+      particlePositions[i * 3 + 1] = (Math.random() - 0.5) * 8;
+      // Spread across Z from behind (-2.5) to in front (+2.5)
+      particlePositions[i * 3 + 2] = (Math.random() - 0.5) * 5.5;
     }
 
     particleGeo.setAttribute("position", new THREE.BufferAttribute(particlePositions, 3));
 
     const particleMat = new THREE.PointsMaterial({
-      color: 0xdfc49c,
+      color: 0xe0c6a3,
       size: 0.035,
       transparent: true,
-      opacity: 0.7,
+      opacity: 0.75,
       blending: THREE.AdditiveBlending,
     });
     const particleSystem = new THREE.Points(particleGeo, particleMat);
     scene.add(particleSystem);
 
-    // 6. Interactive Mouse & Scroll Tracking
+    // 8. Interactive Mouse & Scroll Physics
     let mouseX = 0;
     let mouseY = 0;
     let targetX = 0;
@@ -152,7 +181,7 @@ export default function ThreeHeroBackground() {
     window.addEventListener("mousemove", onMouseMove, { passive: true });
     window.addEventListener("scroll", onScroll, { passive: true });
 
-    // Handle Resize
+    // Handle Window Resize
     const onResize = () => {
       if (!container) return;
       const newW = container.clientWidth || window.innerWidth;
@@ -163,9 +192,9 @@ export default function ThreeHeroBackground() {
     };
     window.addEventListener("resize", onResize);
 
-    // 7. Animation Loop
+    // 9. Animation Loop
     let animationFrameId;
-    let clock = new THREE.Clock();
+    const clock = new THREE.Clock();
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
@@ -174,57 +203,61 @@ export default function ThreeHeroBackground() {
       const elapsedTime = clock.getElapsedTime();
 
       // Smooth mouse lerp
-      mouseX += (targetX - mouseX) * 0.05;
-      mouseY += (targetY - mouseY) * 0.05;
+      mouseX += (targetX - mouseX) * 0.055;
+      mouseY += (targetY - mouseY) * 0.055;
       scrollY += (targetScrollY - scrollY) * 0.08;
 
-      // Rotate central sculpture
-      coreMesh.rotation.x += delta * 0.25;
-      coreMesh.rotation.y += delta * 0.35;
-      wireMesh.rotation.copy(coreMesh.rotation);
+      // Update 3D spotlight position tracking cursor across athlete's muscular back
+      mouseSpotlight.position.x = mouseX * 6.5;
+      mouseSpotlight.position.y = mouseY * 4.5 + 0.5;
 
-      // Rotate orbital rings at distinct harmonic speeds
-      ring1.rotation.x += delta * 0.2;
-      ring1.rotation.y += delta * 0.3;
-      ring2.rotation.y -= delta * 0.25;
-      ring2.rotation.z += delta * 0.15;
-      ring3.rotation.x -= delta * 0.18;
-      ring3.rotation.z -= delta * 0.22;
+      // 3D Parallax Tilt for the Athlete
+      heroGroup.rotation.y = mouseX * 0.35;
+      heroGroup.rotation.x = -mouseY * 0.25;
+      heroGroup.position.x = mouseX * 0.4;
+      heroGroup.position.y = mouseY * 0.3;
 
-      // Group responds smoothly to mouse parallax & scroll depth
-      sculptureGroup.rotation.y = mouseX * 0.8 + elapsedTime * 0.05;
-      sculptureGroup.rotation.x = -mouseY * 0.6;
-      
-      // As user scrolls down, push sculpture slightly back and upward
+      // Rotate orbital rings
+      halo1.rotation.z += delta * 0.25;
+      halo2.rotation.x += delta * 0.2;
+      halo2.rotation.y -= delta * 0.15;
+      halo3.rotation.z -= delta * 0.18;
+
+      // Subtle breathing motion for athlete mesh
+      const breath = Math.sin(elapsedTime * 1.2) * 0.02;
+      athleteMesh.position.z = breath;
+      athleteMesh.scale.set(1 + breath * 0.015, 1 + breath * 0.015, 1);
+
+      // Scroll depth push
       const scrollFactor = Math.min(scrollY / 1000, 1.5);
-      sculptureGroup.position.y = -scrollFactor * 2.5;
-      sculptureGroup.position.z = -scrollFactor * 3.0;
-      sculptureGroup.rotation.z = scrollFactor * 0.5;
+      heroGroup.position.z = -scrollFactor * 3.5;
+      heroGroup.position.y = mouseY * 0.3 - scrollFactor * 1.8;
 
-      // Gently orbit floating particle cloud
-      particleSystem.rotation.y = elapsedTime * 0.03 + mouseX * 0.3;
-      particleSystem.rotation.x = elapsedTime * 0.02 - mouseY * 0.2;
+      // Drift particle cloud
+      particleSystem.rotation.y = elapsedTime * 0.02 + mouseX * 0.2;
+      particleSystem.rotation.x = elapsedTime * 0.015 - mouseY * 0.15;
 
       renderer.render(scene, camera);
     };
 
     animate();
 
-    // 8. Cleanup
+    // 10. Cleanup
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
 
-      coreGeo.dispose();
-      coreMat.dispose();
-      wireMat.dispose();
-      ring1Geo.dispose();
-      ring1Mat.dispose();
-      ring2Geo.dispose();
-      ring2Mat.dispose();
-      ring3Geo.dispose();
+      athleteGeo.dispose();
+      athleteMat.dispose();
+      athleteTexture.dispose();
+      alphaTexture.dispose();
+      halo1Geo.dispose();
+      halo1Mat.dispose();
+      halo2Geo.dispose();
+      halo2Mat.dispose();
+      halo3Geo.dispose();
       particleGeo.dispose();
       particleMat.dispose();
       renderer.dispose();
@@ -244,7 +277,6 @@ export default function ThreeHeroBackground() {
         pointerEvents: "none",
         zIndex: 1,
         overflow: "hidden",
-        opacity: 0.9,
       }}
       aria-hidden="true"
     />

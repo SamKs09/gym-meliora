@@ -11,28 +11,79 @@ export default function Hero({ t, onWatchFilm }) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "radial-gradient(circle at center, rgba(0,0,0,0.5) 0%, rgba(8,8,8,0.96) 80%), url('https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1600') no-repeat center center/cover",
+        background: "radial-gradient(ellipse at 50% 45%, rgba(22, 22, 22, 0.5) 0%, rgba(8, 8, 8, 0.98) 80%)",
         padding: "0 2rem",
         overflow: "hidden",
       }}
     >
-      {/* 3D Kinetic Three.js Sculpture Background */}
+      {/* 3D Kinetic Three.js Athlete & Particles Scene */}
       <ThreeHeroBackground />
 
-      {/* Decorative Radial Glow */}
+      {/* Decorative Radial Gold Ambient Glow */}
       <div
         style={{
           position: "absolute",
-          top: "10%",
+          top: "20%",
           left: "50%",
           transform: "translateX(-50%)",
-          width: "600px",
-          height: "600px",
-          background: "radial-gradient(circle, rgba(197, 168, 128, 0.08) 0%, transparent 70%)",
+          width: "700px",
+          height: "700px",
+          background: "radial-gradient(circle, rgba(197, 168, 128, 0.09) 0%, transparent 70%)",
           pointerEvents: "none",
           zIndex: 1,
         }}
       />
+
+      {/* Floating 3D Telemetry Badges (Desktop) */}
+      <div
+        style={{
+          position: "absolute",
+          top: "140px",
+          left: "5%",
+          zIndex: 2,
+          padding: "0.4rem 0.9rem",
+          borderRadius: "20px",
+          backgroundColor: "rgba(18, 18, 18, 0.65)",
+          border: "1px solid rgba(197, 168, 128, 0.25)",
+          backdropFilter: "blur(10px)",
+          color: "var(--accent-gold)",
+          fontSize: "0.7rem",
+          fontWeight: 700,
+          letterSpacing: "0.15em",
+          textTransform: "uppercase",
+          pointerEvents: "none",
+          display: "flex",
+          alignItems: "center",
+          gap: "0.5rem",
+        }}
+        className="reveal-up delay-200"
+      >
+        <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: "var(--accent-gold)", boxShadow: "0 0 8px var(--accent-gold)" }} />
+        3D Biomechanical Model // 01
+      </div>
+
+      <div
+        style={{
+          position: "absolute",
+          top: "140px",
+          right: "5%",
+          zIndex: 2,
+          padding: "0.4rem 0.9rem",
+          borderRadius: "20px",
+          backgroundColor: "rgba(18, 18, 18, 0.65)",
+          border: "1px solid rgba(197, 168, 128, 0.25)",
+          backdropFilter: "blur(10px)",
+          color: "rgba(255, 255, 255, 0.7)",
+          fontSize: "0.7rem",
+          fontWeight: 600,
+          letterSpacing: "0.15em",
+          textTransform: "uppercase",
+          pointerEvents: "none",
+        }}
+        className="reveal-up delay-300"
+      >
+        Kinetic Symmetry: 100%
+      </div>
 
       <div
         className="container"
