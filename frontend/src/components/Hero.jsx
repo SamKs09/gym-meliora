@@ -1,4 +1,5 @@
 import React from "react";
+import ThreeHeroBackground from "./ThreeHeroBackground";
 
 export default function Hero({ t, onWatchFilm }) {
   return (
@@ -10,11 +11,14 @@ export default function Hero({ t, onWatchFilm }) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "radial-gradient(circle at center, rgba(0,0,0,0.4) 0%, rgba(8,8,8,0.95) 80%), url('https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1600') no-repeat center center/cover",
+        background: "radial-gradient(circle at center, rgba(0,0,0,0.5) 0%, rgba(8,8,8,0.96) 80%), url('https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1600') no-repeat center center/cover",
         padding: "0 2rem",
         overflow: "hidden",
       }}
     >
+      {/* 3D Kinetic Three.js Sculpture Background */}
+      <ThreeHeroBackground />
+
       {/* Decorative Radial Glow */}
       <div
         style={{

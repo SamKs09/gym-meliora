@@ -12,6 +12,9 @@ import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 import BrandMarquee from "@/components/BrandMarquee";
 import Faq from "@/components/Faq";
+import ThreeBackgroundCanvas from "@/components/ThreeBackgroundCanvas";
+import ThreeEquipmentShowcase from "@/components/ThreeEquipmentShowcase";
+import Gsap3dController from "@/components/Gsap3dController";
 import { translations } from "@/translations";
 
 export default function Home() {
@@ -136,6 +139,11 @@ export default function Home() {
   return (
     <>
       <Preloader />
+      {/* 3D Global Ambient Particle Background */}
+      <ThreeBackgroundCanvas />
+      {/* GSAP 3D Interactive Card Tilts & Physics */}
+      <Gsap3dController />
+
       <Navbar lang={lang} setLang={setLang} t={t.navbar} />
       
       <main style={{ textAlign: lang === "tn" ? "right" : "left" }}>
@@ -147,6 +155,9 @@ export default function Home() {
 
         {/* CURATED EQUIPMENT BRAND SCROLLING MARQUEE */}
         <BrandMarquee />
+
+        {/* 3D INTERACTIVE EQUIPMENT SHOWCASE */}
+        <ThreeEquipmentShowcase lang={lang} />
 
         {/* FACILITIES / ZONES SECTION */}
         <Facilities t={t.facilities} />
@@ -232,7 +243,7 @@ export default function Home() {
                       zIndex: 2
                     }}
                   >
-                    "{test.quote}"
+                    &ldquo;{test.quote}&rdquo;
                   </p>
 
                   <div style={{ borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: "1.5rem" }}>

@@ -224,7 +224,7 @@ export default function Vanguard({ t, lang }) {
                     paddingRight: isRtl ? "1.25rem" : "0"
                   }}
                 >
-                  "{getPhilosophy(activeTrainer)}"
+                  &ldquo;{getPhilosophy(activeTrainer)}&rdquo;
                 </p>
 
                 {/* Specialties & social */}

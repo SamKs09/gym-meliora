@@ -12,37 +12,42 @@ export default function ReferralDashboard({ clientId = 'demo_client', clientName
 
   // Fetch existing share links
   useEffect(() => {
-    fetchShareLinks();
-  }, [clientId]);
+    let isCancelled = false;
 
-  const fetchShareLinks = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch(`${BACKEND_URL}/api/share-links/client/${clientId}`);
-      if (res.ok) {
-        const links = await res.json();
-        setShareLinks(links);
-        // Fetch stats for each link
-        links.forEach(link => fetchStats(link.shortCode));
+    async function loadData() {
+      try {
+        setLoading(true);
+        const res = await fetch(`${BACKEND_URL}/api/share-links/client/${clientId}`);
+        if (res.ok && !isCancelled) {
+          const links = await res.json();
+          setShareLinks(links);
+          links.forEach(async (link) => {
+            try {
+              const statsRes = await fetch(`${BACKEND_URL}/api/share-links/stats/${link.shortCode}`);
+              if (statsRes.ok && !isCancelled) {
+                const data = await statsRes.json();
+                setStats((prev) => ({ ...prev, [link.shortCode]: data }));
+              }
+            } catch (err) {
+              console.error(err);
+            }
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching share links:", error);
+      } finally {
+        if (!isCancelled) setLoading(false);
       }
-    } catch (error) {
-      console.error('Error fetching share links:', error);
-    } finally {
-      setLoading(false);
     }
-  };
 
-  const fetchStats = async (shortCode) => {
-    try {
-      const res = await fetch(`${BACKEND_URL}/api/share-links/stats/${shortCode}`);
-      if (res.ok) {
-        const data = await res.json();
-        setStats(prev => ({ ...prev, [shortCode]: data }));
-      }
-    } catch (error) {
-      console.error('Error fetching stats:', error);
+    if (clientId) {
+      loadData();
     }
-  };
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [BACKEND_URL, clientId]);
 
   const generateNewLink = async () => {
     try {
