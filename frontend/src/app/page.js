@@ -85,7 +85,19 @@ export default function Home() {
     document.body.style.transition = "direction 0.5s ease";
     document.body.style.direction = t.dir;
   }, [lang, t.dir]);
-  // Intersection Observer for scroll-driven reveals, delayed to align perfectly with cinematic preloader fade-out
+
+  // Lock body scroll when video modal is open
+  useEffect(() => {
+    if (videoOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [videoOpen]);
+  // Intersection Observer for scroll-driven reveals
   useEffect(() => {
     let observer;
     const timer = setTimeout(() => {
@@ -100,13 +112,13 @@ export default function Home() {
           });
         },
         {
-          threshold: 0.1,
-          rootMargin: "0px 0px -100px 0px"
+          threshold: 0.05,
+          rootMargin: "0px 0px -40px 0px"
         }
       );
 
       revealElements.forEach((el) => observer.observe(el));
-    }, 2800);
+    }, 400);
 
     return () => {
       clearTimeout(timer);
@@ -176,7 +188,7 @@ export default function Home() {
         <section id="testimonials" className="section-padding" style={{ backgroundColor: "#080808" }}>
           <div className="container">
             {/* Header */}
-            <div style={{ textAlign: "center", marginBottom: "5rem" }} className="reveal-up">
+            <div style={{ textAlign: "center", marginBottom: "clamp(3rem, 6vw, 5rem)" }} className="reveal-up">
               <span
                 style={{
                   fontFamily: "var(--font-body)",
@@ -200,8 +212,8 @@ export default function Home() {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                gap: "2rem"
+                gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
+                gap: "clamp(1.25rem, 3vw, 2rem)"
               }}
             >
               {t.testimonials.items.map((test, index) => (
@@ -209,7 +221,7 @@ export default function Home() {
                   key={test.author}
                   className={`glass-panel reveal-scale delay-${(index + 1) * 100}`}
                   style={{
-                    padding: "3rem 2.5rem",
+                    padding: "clamp(2rem, 5vw, 3rem) clamp(1.25rem, 4vw, 2.5rem)",
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",
@@ -307,17 +319,18 @@ export default function Home() {
             onClick={() => setVideoOpen(false)}
             style={{
               position: "absolute",
-              top: "40px",
-              right: lang === "tn" ? "auto" : "40px",
-              left: lang === "tn" ? "40px" : "auto",
+              top: "clamp(16px, 4vw, 36px)",
+              right: lang === "tn" ? "auto" : "clamp(16px, 4vw, 36px)",
+              left: lang === "tn" ? "clamp(16px, 4vw, 36px)" : "auto",
               background: "transparent",
               border: "none",
               cursor: "pointer",
               color: "#ffffff",
+              padding: "0.5rem",
               zIndex: 100000
             }}
           >
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <line x1="18" y1="6" x2="6" y2="18"></line>
               <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>

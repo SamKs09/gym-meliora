@@ -26,7 +26,7 @@ export default function Manifesto({ t }) {
         <div
           style={{
             maxWidth: "700px",
-            marginBottom: "5rem",
+            marginBottom: "clamp(3rem, 6vw, 5rem)",
           }}
           className="manifesto-header reveal-up"
         >
@@ -68,8 +68,8 @@ export default function Manifesto({ t }) {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-            gap: "2rem",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
+            gap: "clamp(1.25rem, 3vw, 2rem)",
           }}
         >
           {pillars.map((pillar, i) => (
@@ -77,7 +77,7 @@ export default function Manifesto({ t }) {
               key={pillar.num}
               className={`glass-panel reveal-scale delay-${(i + 1) * 100}`}
               style={{
-                padding: "3rem 2rem",
+                padding: "clamp(2rem, 5vw, 3rem) clamp(1.25rem, 4vw, 2rem)",
                 display: "flex",
                 flexDirection: "column",
                 position: "relative",

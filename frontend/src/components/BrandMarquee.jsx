@@ -35,7 +35,7 @@ export default function BrandMarquee() {
           position: "absolute",
           top: 0,
           left: 0,
-          width: "150px",
+          width: "clamp(30px, 12vw, 150px)",
           height: "100%",
           background: "linear-gradient(90deg, #080808 0%, transparent 100%)",
           zIndex: 2,
@@ -47,7 +47,7 @@ export default function BrandMarquee() {
           position: "absolute",
           top: 0,
           right: 0,
-          width: "150px",
+          width: "clamp(30px, 12vw, 150px)",
           height: "100%",
           background: "linear-gradient(270deg, #080808 0%, transparent 100%)",
           zIndex: 2,
@@ -62,12 +62,12 @@ export default function BrandMarquee() {
             className="marquee-item"
             style={{
               fontFamily: "var(--font-header)",
-              fontSize: "clamp(1.5rem, 3.5vw, 2.5rem)",
+              fontSize: "clamp(1.3rem, 3.5vw, 2.5rem)",
               fontWeight: 800,
               letterSpacing: "0.25em",
               color: "rgba(255,255,255,0.08)",
               textTransform: "uppercase",
-              padding: "0 4rem",
+              padding: "0 clamp(1.5rem, 4vw, 4rem)",
               display: "inline-block",
               transition: "color 0.4s ease",
               cursor: "default"

@@ -64,8 +64,8 @@ export default function Facilities({ t }) {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-            gap: "2.5rem"
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
+            gap: "clamp(1.5rem, 3vw, 2.5rem)"
           }}
         >
           {zones.map((zone, i) => (
@@ -73,11 +73,11 @@ export default function Facilities({ t }) {
               key={zone.title}
               style={{
                 position: "relative",
-                height: "500px",
+                height: "clamp(380px, 45vh, 500px)",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "flex-end",
-                padding: "3rem 2rem",
+                padding: "clamp(2rem, 5vw, 3rem) clamp(1.25rem, 4vw, 2rem)",
                 overflow: "hidden",
                 cursor: "pointer",
                 border: "1px solid rgba(255,255,255,0.05)"

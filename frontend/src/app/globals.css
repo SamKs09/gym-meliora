@@ -38,13 +38,20 @@ html {
   color: var(--text-primary);
   font-family: var(--font-body);
   overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
   min-height: 100vh;
+  min-height: 100dvh;
   overflow-x: hidden;
   background: var(--bg-primary);
   line-height: 1.6;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button, a, input, select, textarea {
+  touch-action: manipulation;
 }
 
 /* --- SCROLLBAR --- */
@@ -99,8 +106,20 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (max-width: 768px) {
+  .container {
+    padding: 0 1.25rem !important;
+  }
   .section-padding {
-    padding: 5rem 0;
+    padding: 4.5rem 0 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 1rem !important;
+  }
+  .section-padding {
+    padding: 3.5rem 0 !important;
   }
 }
 
@@ -453,8 +472,37 @@ h1, h2, h3, h4, h5, h6 {
 
 .header-entrance {
   animation: slide-down 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  animation-delay: 2.8s;
+  animation-delay: 2.2s;
   opacity: 0;
+}
+
+@media (max-width: 900px) {
+  .header-entrance {
+    animation-delay: 0.1s !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .desktop-only-badge {
+    display: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-btn-group {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    max-width: 320px !important;
+    margin: 0 auto;
+  }
+  .hero-btn-group .btn-primary,
+  .hero-btn-group .btn-secondary {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 0.9rem 1.5rem !important;
+  }
+  input, select, textarea {
+    font-size: 16px !important; /* Prevents auto-zoom on iOS */
+  }
 }
 
 /* --- CUSTOM PREMIUM MAGNETIC LIQUID CURSOR --- */

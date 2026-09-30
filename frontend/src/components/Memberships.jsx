@@ -32,7 +32,7 @@ export default function Memberships({ t }) {
     <section id="memberships" className="section-padding" style={{ backgroundColor: "#080808", paddingBottom: "2rem" }}>
       <div className="container">
         {/* Section Header */}
-        <div style={{ textAlign: "center", marginBottom: "6rem" }} className="reveal-up">
+        <div style={{ textAlign: "center", marginBottom: "clamp(3rem, 6vw, 5rem)" }} className="reveal-up">
           <span
             style={{
               fontFamily: "var(--font-body)",
@@ -73,8 +73,8 @@ export default function Memberships({ t }) {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-            gap: "2.5rem",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
+            gap: "clamp(1.5rem, 3vw, 2.5rem)",
             alignItems: "stretch"
           }}
         >
@@ -84,7 +84,7 @@ export default function Memberships({ t }) {
               className={`glass-panel price-card reveal-scale delay-${(i + 1) * 100}`}
               style={{
                 position: "relative",
-                padding: "3.5rem 2.5rem",
+                padding: "clamp(2.5rem, 5vw, 3.5rem) clamp(1.25rem, 4vw, 2.5rem)",
                 display: "flex",
                 flexDirection: "column",
                 border: tier.popular ? "1px solid var(--accent-gold)" : "1px solid var(--glass-border)",

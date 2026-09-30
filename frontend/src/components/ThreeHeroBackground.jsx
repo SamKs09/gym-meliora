@@ -12,6 +12,8 @@ export default function ThreeHeroBackground() {
     const width = container.clientWidth || window.innerWidth;
     const height = container.clientHeight || window.innerHeight;
 
+    const isMobile = window.innerWidth < 768;
+
     // 1. Scene & Camera
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
@@ -19,12 +21,12 @@ export default function ThreeHeroBackground() {
 
     // 2. WebGL Renderer
     const renderer = new THREE.WebGLRenderer({
-      antialias: true,
+      antialias: !isMobile,
       alpha: true,
       powerPreference: "high-performance",
     });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.15;
     container.appendChild(renderer.domElement);
@@ -52,90 +54,42 @@ export default function ThreeHeroBackground() {
     const heroGroup = new THREE.Group();
     scene.add(heroGroup);
 
-    // Soft Radial Feather Alpha Map for Seamless Blending
-    const alphaCanvas = document.createElement("canvas");
-    alphaCanvas.width = 512;
-    alphaCanvas.height = 512;
-    const alphaCtx = alphaCanvas.getContext("2d");
-    if (alphaCtx) {
-      const grad = alphaCtx.createRadialGradient(256, 256, 140, 256, 256, 256);
-      grad.addColorStop(0, "rgba(255, 255, 255, 1)");
-      grad.addColorStop(0.65, "rgba(255, 255, 255, 0.95)");
-      grad.addColorStop(0.9, "rgba(255, 255, 255, 0.4)");
-      grad.addColorStop(1, "rgba(255, 255, 255, 0)");
-      alphaCtx.fillStyle = grad;
-      alphaCtx.fillRect(0, 0, 512, 512);
-    }
-    const alphaTexture = new THREE.CanvasTexture(alphaCanvas);
-
-    // 5. 3D Athlete Mesh with Cylindrical Curvature
-    const textureLoader = new THREE.TextureLoader();
-    const athleteTexture = textureLoader.load("/hero-athlete.png");
-    athleteTexture.generateMipmaps = true;
-    athleteTexture.minFilter = THREE.LinearMipmapLinearFilter;
-
-    // Plane geometry with 16:9 ratio (width 7.2, height 4.05) with 48 subdivisions for 3D curved warp
-    const athleteGeo = new THREE.PlaneGeometry(7.4, 4.16, 48, 48);
-
-    // Apply gentle curved wrap to create 3D IMAX perspective
-    const posAttribute = athleteGeo.attributes.position;
-    for (let i = 0; i < posAttribute.count; i++) {
-      const x = posAttribute.getX(i);
-      const curve = Math.pow(x / 3.7, 2) * 0.4;
-      posAttribute.setZ(i, -curve);
-    }
-    athleteGeo.computeVertexNormals();
-
-    const athleteMat = new THREE.MeshStandardMaterial({
-      map: athleteTexture,
-      alphaMap: alphaTexture,
-      transparent: true,
-      opacity: 0.92,
-      roughness: 0.4,
-      metalness: 0.15,
-      side: THREE.DoubleSide,
-    });
-
-    const athleteMesh = new THREE.Mesh(athleteGeo, athleteMat);
-    athleteMesh.position.set(0, 0.1, 0);
-    heroGroup.add(athleteMesh);
-
-    // 6. Halo of Excellence: 3D Orbital Rings Behind the Athlete
+    // 5. Kinetic 3D Orbital Rings (Halo of Excellence)
     const haloGroup = new THREE.Group();
-    haloGroup.position.set(0, 0.3, -0.6);
+    haloGroup.position.set(0, 0, 0);
     heroGroup.add(haloGroup);
 
-    // Inner Gold Halo Ring
-    const halo1Geo = new THREE.TorusGeometry(2.3, 0.025, 16, 100);
+    // Gold Ring
+    const halo1Geo = new THREE.TorusGeometry(3.0, 0.03, 16, 120);
     const halo1Mat = new THREE.MeshStandardMaterial({
       color: 0xd4af37,
       metalness: 0.95,
       roughness: 0.15,
     });
     const halo1 = new THREE.Mesh(halo1Geo, halo1Mat);
-    halo1.rotation.x = Math.PI / 6;
+    halo1.rotation.x = Math.PI / 4;
     haloGroup.add(halo1);
 
-    // Outer Chrome Kinetic Ring
-    const halo2Geo = new THREE.TorusGeometry(2.8, 0.018, 16, 100);
+    // Outer Obsidian Ring
+    const halo2Geo = new THREE.TorusGeometry(3.6, 0.02, 16, 120);
     const halo2Mat = new THREE.MeshStandardMaterial({
       color: 0x444444,
       metalness: 0.98,
       roughness: 0.1,
     });
     const halo2 = new THREE.Mesh(halo2Geo, halo2Mat);
-    halo2.rotation.y = Math.PI / 4;
+    halo2.rotation.y = Math.PI / 3;
     haloGroup.add(halo2);
 
     // Tilted Equatorial Accent Ring
-    const halo3Geo = new THREE.TorusGeometry(3.3, 0.015, 16, 120);
+    const halo3Geo = new THREE.TorusGeometry(4.2, 0.018, 16, 120);
     const halo3 = new THREE.Mesh(halo3Geo, halo1Mat);
     halo3.rotation.x = -Math.PI / 4;
     halo3.rotation.z = Math.PI / 5;
     haloGroup.add(halo3);
 
-    // 7. Depth Particles (Floating in FRONT and BEHIND the athlete)
-    const particleCount = 650;
+    // 6. Depth Particles (Floating around the scene in 3D)
+    const particleCount = isMobile ? 220 : 650;
     const particleGeo = new THREE.BufferGeometry();
     const particlePositions = new Float32Array(particleCount * 3);
 
@@ -199,6 +153,9 @@ export default function ThreeHeroBackground() {
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
 
+      // Skip render calculations when hero is completely scrolled out of view
+      if (scrollY > height * 1.3) return;
+
       const delta = clock.getDelta();
       const elapsedTime = clock.getElapsedTime();
 
@@ -223,11 +180,6 @@ export default function ThreeHeroBackground() {
       halo2.rotation.y -= delta * 0.15;
       halo3.rotation.z -= delta * 0.18;
 
-      // Subtle breathing motion for athlete mesh
-      const breath = Math.sin(elapsedTime * 1.2) * 0.02;
-      athleteMesh.position.z = breath;
-      athleteMesh.scale.set(1 + breath * 0.015, 1 + breath * 0.015, 1);
-
       // Scroll depth push
       const scrollFactor = Math.min(scrollY / 1000, 1.5);
       heroGroup.position.z = -scrollFactor * 3.5;
@@ -249,10 +201,6 @@ export default function ThreeHeroBackground() {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
 
-      athleteGeo.dispose();
-      athleteMat.dispose();
-      athleteTexture.dispose();
-      alphaTexture.dispose();
       halo1Geo.dispose();
       halo1Mat.dispose();
       halo2Geo.dispose();

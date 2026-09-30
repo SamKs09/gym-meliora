@@ -17,6 +17,17 @@ export default function Navbar({ lang, setLang, t }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
   const isRtl = lang === "tn";
 
   return (
@@ -202,12 +213,16 @@ export default function Navbar({ lang, setLang, t }) {
           bottom: 0,
           left: 0,
           backgroundColor: "rgba(8, 8, 8, 0.98)",
+          backdropFilter: "blur(25px)",
+          WebkitBackdropFilter: "blur(25px)",
           zIndex: 98,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          justifyContent: "center",
-          gap: "2.5rem",
+          justifyContent: "flex-start",
+          padding: "6rem 2rem 3rem",
+          overflowY: "auto",
+          gap: "1.2rem",
           transition: "var(--transition-smooth)",
           transform: isOpen ? "translateX(0)" : "translateX(100%)",
           opacity: isOpen ? 1 : 0,
@@ -229,12 +244,13 @@ export default function Navbar({ lang, setLang, t }) {
             onClick={() => setIsOpen(false)}
             style={{
               fontFamily: "var(--font-header)",
-              fontSize: "2rem",
+              fontSize: "clamp(1.3rem, 5.5vw, 1.9rem)",
               fontWeight: 800,
               textTransform: "uppercase",
-              letterSpacing: "0.05em",
+              letterSpacing: "0.06em",
               color: "#ffffff",
               textDecoration: "none",
+              padding: "0.4rem 0",
               transition: "var(--transition-fast)",
             }}
             onMouseEnter={(e) => (e.target.style.color = "var(--accent-gold)")}
@@ -247,7 +263,12 @@ export default function Navbar({ lang, setLang, t }) {
           href="#memberships"
           onClick={() => setIsOpen(false)}
           className="btn-primary"
-          style={{ marginTop: "2rem" }}
+          style={{
+            marginTop: "1.5rem",
+            width: "100%",
+            maxWidth: "280px",
+            textAlign: "center",
+          }}
         >
           {t.join}
         </a>
@@ -257,7 +278,7 @@ export default function Navbar({ lang, setLang, t }) {
       <style jsx global>{`
         @media (max-width: 1040px) {
           header {
-            padding: 0 2rem !important;
+            padding: 0 1.5rem !important;
           }
           .desktop-nav {
             display: none !important;
@@ -267,6 +288,12 @@ export default function Navbar({ lang, setLang, t }) {
           }
           header .btn-secondary {
             display: none !important;
+          }
+        }
+        @media (max-width: 640px) {
+          header {
+            padding: 0 1rem !important;
+            height: 75px !important;
           }
         }
       `}</style>

@@ -2,8 +2,9 @@
 import React, { useState } from "react";
 
 export default function ClassSchedule({ lang = "fr" }) {
-  const [selectedDay, setSelectedDay] = useState("ALL");
+  const [selectedDay, setSelectedDay] = useState("MON");
   const [activeFilter, setActiveFilter] = useState("ALL");
+  const [showFullGridMobile, setShowFullGridMobile] = useState(false);
 
   const scheduleData = [
     {
@@ -214,6 +215,23 @@ export default function ClassSchedule({ lang = "fr" }) {
 
   const isRtl = lang === "tn";
 
+  // Build list of active classes for mobile view
+  const activeDaysList =
+    selectedDay === "ALL"
+      ? scheduleData
+      : scheduleData.filter((d) => d.dayId === selectedDay);
+
+  const mobileClasses = [];
+  activeDaysList.forEach((day) => {
+    day.classes.forEach((cls) => {
+      if (!cls.isSlotEmpty) {
+        if (activeFilter === "ALL" || cls.type === activeFilter) {
+          mobileClasses.push({ ...cls, dayName: day.dayName[lang] || day.dayName.fr, dayFull: day.dayFull[lang] || day.dayFull.fr });
+        }
+      }
+    });
+  });
+
   return (
     <section
       id="schedule"
@@ -255,11 +273,11 @@ export default function ClassSchedule({ lang = "fr" }) {
               fontFamily: "var(--font-body)",
               fontSize: "0.8rem",
               fontWeight: 700,
-              letterSpacing: "0.18em",
-              color: "rgba(255, 255, 255, 0.6)",
+              letterSpacing: "0.15em",
+              color: "rgba(255, 255, 255, 0.65)",
               textTransform: "uppercase",
               display: "inline-block",
-              maxWidth: "600px",
+              maxWidth: "650px",
               lineHeight: "1.4",
             }}
           >
@@ -278,19 +296,19 @@ export default function ClassSchedule({ lang = "fr" }) {
             alignItems: "center",
             justifyContent: "space-between",
             flexWrap: "wrap",
-            gap: "2rem",
-            marginBottom: "3rem",
+            gap: "1.5rem",
+            marginBottom: "2.5rem",
             borderBottom: "1px solid rgba(255, 255, 255, 0.12)",
             paddingBottom: "1.5rem",
             flexDirection: isRtl ? "row-reverse" : "row",
           }}
           className="reveal-up delay-100"
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "2rem", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "1.5rem", flexWrap: "wrap" }}>
             <h2
               style={{
                 fontFamily: "var(--font-header)",
-                fontSize: "clamp(2rem, 4.5vw, 3.8rem)",
+                fontSize: "clamp(1.8rem, 4vw, 3.8rem)",
                 fontWeight: 900,
                 letterSpacing: "-0.01em",
                 textTransform: "uppercase",
@@ -301,16 +319,6 @@ export default function ClassSchedule({ lang = "fr" }) {
             >
               PLANNING DES COURS
             </h2>
-
-            <div
-              style={{
-                height: "36px",
-                width: "2px",
-                backgroundColor: "rgba(255, 255, 255, 0.2)",
-                display: "none",
-              }}
-              className="desktop-divider"
-            />
 
             <a
               href="https://www.instagram.com/gymmeliora/"
@@ -352,7 +360,7 @@ export default function ClassSchedule({ lang = "fr" }) {
             </a>
           </div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "1.25rem" }}>
             <span
               style={{
                 fontFamily: "var(--font-header)",
@@ -366,18 +374,18 @@ export default function ClassSchedule({ lang = "fr" }) {
               WEEK
             </span>
 
-            {/* Meliora Shield God Logo Mark */}
+            {/* Meliora Shield Emblem */}
             <div
               style={{
-                width: "48px",
-                height: "56px",
+                width: "42px",
+                height: "50px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 opacity: 0.9,
               }}
             >
-              <svg viewBox="0 0 100 120" width="46" height="54" fill="none">
+              <svg viewBox="0 0 100 120" width="40" height="48" fill="none">
                 <path
                   d="M50 5 L90 25 L90 75 L50 115 L10 75 L10 25 Z"
                   stroke="#ffffff"
@@ -399,7 +407,7 @@ export default function ClassSchedule({ lang = "fr" }) {
             alignItems: "center",
             gap: "0.5rem",
             flexWrap: "wrap",
-            marginBottom: "2rem",
+            marginBottom: "1.5rem",
           }}
         >
           {filterOptions.map((opt) => (
@@ -424,6 +432,44 @@ export default function ClassSchedule({ lang = "fr" }) {
           ))}
         </div>
 
+        {/* Mobile View Mode Switcher Toggle (shown on mobile < 900px) */}
+        <div
+          className="mobile-view-toggle"
+          style={{
+            display: "none",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginBottom: "1.25rem",
+            padding: "0.5rem 1rem",
+            borderRadius: "12px",
+            backgroundColor: "rgba(255, 255, 255, 0.03)",
+            border: "1px solid rgba(255, 255, 255, 0.08)",
+          }}
+        >
+          <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: 600 }}>
+            {showFullGridMobile
+              ? lang === "fr" ? "Mode: Grille 7 jours" : "Mode: 7-Day Grid"
+              : lang === "fr" ? "Mode: Vue par jour" : "Mode: Daily View"}
+          </span>
+          <button
+            onClick={() => setShowFullGridMobile(!showFullGridMobile)}
+            style={{
+              padding: "0.35rem 0.85rem",
+              borderRadius: "20px",
+              backgroundColor: "rgba(230, 40, 40, 0.15)",
+              border: "1px solid #e62828",
+              color: "#ffffff",
+              fontSize: "0.75rem",
+              fontWeight: 700,
+              cursor: "pointer",
+            }}
+          >
+            {showFullGridMobile
+              ? lang === "fr" ? "Afficher vue par jour" : "Show daily view"
+              : lang === "fr" ? "Afficher grille complète" : "Show full grid"}
+          </button>
+        </div>
+
         {/* Mobile Day Selector Tabs */}
         <div
           className="mobile-day-tabs"
@@ -431,7 +477,8 @@ export default function ClassSchedule({ lang = "fr" }) {
             display: "none",
             gap: "0.4rem",
             overflowX: "auto",
-            paddingBottom: "1rem",
+            WebkitOverflowScrolling: "touch",
+            paddingBottom: "0.75rem",
             marginBottom: "1.5rem",
           }}
         >
@@ -441,7 +488,7 @@ export default function ClassSchedule({ lang = "fr" }) {
               onClick={() => setSelectedDay(col.dayId)}
               style={{
                 flex: "0 0 auto",
-                padding: "0.5rem 1rem",
+                padding: "0.55rem 1.1rem",
                 borderRadius: "8px",
                 border: selectedDay === col.dayId ? "1px solid #e62828" : "1px solid rgba(255,255,255,0.08)",
                 backgroundColor: selectedDay === col.dayId ? "#e62828" : "rgba(18, 18, 18, 0.8)",
@@ -459,7 +506,7 @@ export default function ClassSchedule({ lang = "fr" }) {
             onClick={() => setSelectedDay("ALL")}
             style={{
               flex: "0 0 auto",
-              padding: "0.5rem 1rem",
+              padding: "0.55rem 1.1rem",
               borderRadius: "8px",
               border: selectedDay === "ALL" ? "1px solid var(--accent-gold)" : "1px solid rgba(255,255,255,0.08)",
               backgroundColor: selectedDay === "ALL" ? "rgba(197, 168, 128, 0.2)" : "rgba(18, 18, 18, 0.8)",
@@ -474,8 +521,138 @@ export default function ClassSchedule({ lang = "fr" }) {
           </button>
         </div>
 
-        {/* Schedule Table Grid */}
+        {/* MOBILE CARD LIST VIEW (Displayed on mobile when showFullGridMobile is false) */}
+        {!showFullGridMobile && (
+          <div className="mobile-card-stack" style={{ display: "none" }}>
+            {mobileClasses.length === 0 ? (
+              <div
+                style={{
+                  padding: "3rem 1.5rem",
+                  textAlign: "center",
+                  backgroundColor: "rgba(18, 18, 18, 0.5)",
+                  border: "1px dashed rgba(255, 255, 255, 0.15)",
+                  borderRadius: "12px",
+                }}
+              >
+                <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem" }}>
+                  {lang === "fr"
+                    ? "Aucun cours programmé pour ce jour / filtre."
+                    : "No classes scheduled for this day / filter."}
+                </p>
+              </div>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                {mobileClasses.map((cls, idx) => (
+                  <div
+                    key={cls.id || idx}
+                    className="glass-panel"
+                    style={{
+                      padding: "1.4rem",
+                      borderRadius: "14px",
+                      border: "1px solid rgba(255, 255, 255, 0.1)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      gap: "1rem",
+                      backgroundColor: "rgba(14, 14, 14, 0.85)",
+                    }}
+                  >
+                    <div>
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.4rem" }}>
+                        <span
+                          style={{
+                            fontSize: "0.7rem",
+                            fontWeight: 800,
+                            letterSpacing: "0.1em",
+                            padding: "0.2rem 0.5rem",
+                            borderRadius: "4px",
+                            backgroundColor: "rgba(230, 40, 40, 0.15)",
+                            color: "#e62828",
+                            border: "1px solid rgba(230, 40, 40, 0.3)",
+                            textTransform: "uppercase",
+                          }}
+                        >
+                          {cls.dayName}
+                        </span>
+                        {cls.sub && (
+                          <span style={{ fontSize: "0.7rem", color: "var(--accent-gold)", fontWeight: 700 }}>
+                            {cls.sub}
+                          </span>
+                        )}
+                      </div>
+
+                      <h4
+                        style={{
+                          fontFamily: "var(--font-header)",
+                          fontSize: "1.25rem",
+                          fontWeight: 900,
+                          color: "#ffffff",
+                          textTransform: "uppercase",
+                          margin: "0 0 0.4rem 0",
+                          lineHeight: "1.15",
+                        }}
+                      >
+                        {cls.name}
+                      </h4>
+
+                      <span
+                        style={{
+                          fontSize: "0.75rem",
+                          color: "rgba(255, 255, 255, 0.75)",
+                          fontWeight: 700,
+                          display: "block",
+                          letterSpacing: "0.05em",
+                        }}
+                      >
+                        {cls.coach}
+                      </span>
+                    </div>
+
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "0.5rem" }}>
+                      <span
+                        style={{
+                          fontFamily: "var(--font-header)",
+                          fontSize: "1.15rem",
+                          fontWeight: 900,
+                          color: "#e62828",
+                          letterSpacing: "0.04em",
+                          textShadow: "0 0 12px rgba(230, 40, 40, 0.35)",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {cls.time}
+                      </span>
+
+                      <a
+                        href={`https://wa.me/21698703405?text=Bonjour%20Meliora,%20je%20souhaite%20réserver%20une%20place%20pour%20le%20cours%20de%20${encodeURIComponent(cls.name)}%20à%20${encodeURIComponent(cls.time)}.`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          padding: "0.45rem 0.9rem",
+                          borderRadius: "20px",
+                          backgroundColor: "#e62828",
+                          color: "#ffffff",
+                          fontSize: "0.75rem",
+                          fontWeight: 800,
+                          textDecoration: "none",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.05em",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {lang === "fr" ? "Réserver" : lang === "tn" ? "احجز" : "Book"}
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Schedule Table Grid (Shown on desktop or when mobile user toggles showFullGridMobile) */}
         <div
+          className={`schedule-table-wrapper ${showFullGridMobile ? "force-show-mobile" : ""}`}
           style={{
             overflowX: "auto",
             WebkitOverflowScrolling: "touch",
@@ -493,7 +670,7 @@ export default function ClassSchedule({ lang = "fr" }) {
             }}
           >
             {scheduleData.map((col) => {
-              if (selectedDay !== "ALL" && selectedDay !== col.dayId) return null;
+              if (selectedDay !== "ALL" && selectedDay !== col.dayId && !showFullGridMobile) return null;
 
               return (
                 <div
@@ -641,7 +818,7 @@ export default function ClassSchedule({ lang = "fr" }) {
         <div
           style={{
             marginTop: "2rem",
-            padding: "1.5rem 2rem",
+            padding: "1.5rem clamp(1rem, 3vw, 2rem)",
             backgroundColor: "#080808",
             border: "1px solid rgba(255, 255, 255, 0.12)",
             display: "flex",
@@ -763,11 +940,16 @@ export default function ClassSchedule({ lang = "fr" }) {
 
       <style jsx>{`
         @media (max-width: 900px) {
-          .desktop-divider {
+          .mobile-day-tabs,
+          .mobile-view-toggle,
+          .mobile-card-stack {
+            display: flex !important;
+          }
+          .schedule-table-wrapper {
             display: none !important;
           }
-          .mobile-day-tabs {
-            display: flex !important;
+          .schedule-table-wrapper.force-show-mobile {
+            display: block !important;
           }
         }
       `}</style>
@@ -775,7 +957,7 @@ export default function ClassSchedule({ lang = "fr" }) {
   );
 }
 
-// Graphic Diagonal Hatch Slot Component replicating the exact poster visual
+// Graphic Diagonal Hatch Slot Component
 function EmptyHatchSlot() {
   return (
     <div

@@ -73,12 +73,18 @@ export default function Gsap3dController() {
       }
     });
 
-    // 2. 3D Card Hover Tilt with GSAP
-    const cards = document.querySelectorAll(
-      ".glass-panel, .facility-card, .price-card, .gallery-item, .vanguard-card"
-    );
+    // 2. 3D Card Hover Tilt with GSAP (Desktop pointer devices only)
+    const isTouchDevice =
+      typeof window !== "undefined" &&
+      (window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 1024);
 
     const tiltCleanups = [];
+    const magneticCleanups = [];
+
+    if (!isTouchDevice) {
+      const cards = document.querySelectorAll(
+        ".glass-panel, .facility-card, .price-card, .gallery-item, .vanguard-card"
+      );
 
     cards.forEach((card) => {
       // Ensure 3D transform preserve
@@ -167,6 +173,7 @@ export default function Gsap3dController() {
         btn.removeEventListener("mouseleave", onBtnMouseLeave);
       });
     });
+    }
 
     return () => {
       heroCtx.revert();

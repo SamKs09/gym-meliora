@@ -1,4 +1,5 @@
 import React from "react";
+import HeroScrollVideo from "./HeroScrollVideo";
 import ThreeHeroBackground from "./ThreeHeroBackground";
 
 export default function Hero({ t, onWatchFilm }) {
@@ -8,15 +9,19 @@ export default function Hero({ t, onWatchFilm }) {
       style={{
         position: "relative",
         minHeight: "100vh",
+        minHeight: "100dvh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "radial-gradient(ellipse at 50% 45%, rgba(22, 22, 22, 0.5) 0%, rgba(8, 8, 8, 0.98) 80%)",
-        padding: "0 2rem",
+        backgroundColor: "#080808",
+        padding: "clamp(6rem, 10vh, 8rem) clamp(1rem, 4vw, 2rem) clamp(4rem, 8vh, 6rem)",
         overflow: "hidden",
       }}
     >
-      {/* 3D Kinetic Three.js Athlete & Particles Scene */}
+      {/* Scroll-Driven Video Background */}
+      <HeroScrollVideo />
+
+      {/* 3D Kinetic Three.js Halo & Golden Particles Overlay */}
       <ThreeHeroBackground />
 
       {/* Decorative Radial Gold Ambient Glow */}
@@ -28,13 +33,13 @@ export default function Hero({ t, onWatchFilm }) {
           transform: "translateX(-50%)",
           width: "700px",
           height: "700px",
-          background: "radial-gradient(circle, rgba(197, 168, 128, 0.09) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(197, 168, 128, 0.08) 0%, transparent 70%)",
           pointerEvents: "none",
           zIndex: 1,
         }}
       />
 
-      {/* Floating 3D Telemetry Badges (Desktop) */}
+      {/* Floating 3D Telemetry Badges (Desktop Only) */}
       <div
         style={{
           position: "absolute",
@@ -56,7 +61,7 @@ export default function Hero({ t, onWatchFilm }) {
           alignItems: "center",
           gap: "0.5rem",
         }}
-        className="reveal-up delay-200"
+        className="reveal-up delay-200 desktop-only-badge"
       >
         <span style={{ width: "6px", height: "6px", borderRadius: "50%", backgroundColor: "var(--accent-gold)", boxShadow: "0 0 8px var(--accent-gold)" }} />
         3D Biomechanical Model // 01
@@ -80,7 +85,7 @@ export default function Hero({ t, onWatchFilm }) {
           textTransform: "uppercase",
           pointerEvents: "none",
         }}
-        className="reveal-up delay-300"
+        className="reveal-up delay-300 desktop-only-badge"
       >
         Kinetic Symmetry: 100%
       </div>
@@ -101,12 +106,12 @@ export default function Hero({ t, onWatchFilm }) {
           className="reveal-up"
           style={{
             fontFamily: "var(--font-body)",
-            fontSize: "0.9rem",
+            fontSize: "clamp(0.75rem, 2.5vw, 0.9rem)",
             fontWeight: 700,
             textTransform: "uppercase",
             color: "var(--accent-gold)",
-            letterSpacing: "0.3em",
-            marginBottom: "1.5rem",
+            letterSpacing: "0.25em",
+            marginBottom: "1.2rem",
             display: "inline-block",
           }}
         >
@@ -117,12 +122,13 @@ export default function Hero({ t, onWatchFilm }) {
         <h1
           className="reveal-up delay-100"
           style={{
-            fontSize: "clamp(2.5rem, 6.5vw, 6.5rem)",
-            lineHeight: "0.98",
-            marginBottom: "2rem",
+            fontSize: "clamp(2.1rem, 7.5vw, 6.5rem)",
+            lineHeight: "1.0",
+            marginBottom: "1.75rem",
             textTransform: "uppercase",
             fontFamily: "var(--font-header)",
             fontWeight: 800,
+            maxWidth: "1000px",
           }}
         >
           {t.title.split(".").map((part, idx) => {
@@ -145,10 +151,10 @@ export default function Hero({ t, onWatchFilm }) {
         <p
           className="reveal-up delay-200"
           style={{
-            fontSize: "clamp(1rem, 2vw, 1.25rem)",
+            fontSize: "clamp(0.95rem, 2vw, 1.25rem)",
             color: "var(--text-secondary)",
             maxWidth: "700px",
-            marginBottom: "3rem",
+            marginBottom: "2.5rem",
             fontWeight: 400,
             lineHeight: "1.6",
           }}
@@ -158,12 +164,13 @@ export default function Hero({ t, onWatchFilm }) {
 
         {/* Action Buttons */}
         <div
-          className="reveal-up delay-300"
+          className="reveal-up delay-300 hero-btn-group"
           style={{
             display: "flex",
-            gap: "1.5rem",
+            gap: "1rem",
             flexWrap: "wrap",
             justifyContent: "center",
+            width: "100%",
           }}
         >
           <a href="#memberships" className="btn-primary">

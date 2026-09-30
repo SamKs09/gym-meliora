@@ -216,11 +216,12 @@ export default function Gallery({ t, lang }) {
           {/* Prev Button */}
           <button
             onClick={isRtl ? handleNext : handlePrev}
+            className="lightbox-nav-btn lightbox-prev"
             style={{
               position: "absolute",
               left: "40px",
-              background: "rgba(255,255,255,0.05)",
-              border: "1px solid rgba(255,255,255,0.1)",
+              background: "rgba(255,255,255,0.08)",
+              border: "1px solid rgba(255,255,255,0.15)",
               borderRadius: "50%",
               width: "60px",
               height: "60px",
@@ -239,6 +240,7 @@ export default function Gallery({ t, lang }) {
 
           {/* Large Image */}
           <div
+            className="lightbox-content"
             style={{
               maxWidth: "80%",
               maxHeight: "80%",
@@ -273,11 +275,12 @@ export default function Gallery({ t, lang }) {
           {/* Next Button */}
           <button
             onClick={isRtl ? handlePrev : handleNext}
+            className="lightbox-nav-btn lightbox-next"
             style={{
               position: "absolute",
               right: "40px",
-              background: "rgba(255,255,255,0.05)",
-              border: "1px solid rgba(255,255,255,0.1)",
+              background: "rgba(255,255,255,0.08)",
+              border: "1px solid rgba(255,255,255,0.15)",
               borderRadius: "50%",
               width: "60px",
               height: "60px",
@@ -311,6 +314,28 @@ export default function Gallery({ t, lang }) {
         @media (max-width: 768px) {
           .gallery-item {
             height: 280px !important;
+          }
+          .gallery-overlay {
+            opacity: 1 !important;
+            background: linear-gradient(to top, rgba(8, 8, 8, 0.95) 0%, rgba(8, 8, 8, 0.5) 40%, transparent 100%) !important;
+            justify-content: flex-end !important;
+            padding: 1.5rem 1rem !important;
+          }
+          .gallery-overlay span {
+            display: none !important;
+          }
+          .lightbox-nav-btn {
+            width: 44px !important;
+            height: 44px !important;
+          }
+          .lightbox-prev {
+            left: 12px !important;
+          }
+          .lightbox-next {
+            right: 12px !important;
+          }
+          .lightbox-content {
+            max-width: 92% !important;
           }
         }
       `}</style>

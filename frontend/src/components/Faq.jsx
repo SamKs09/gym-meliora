@@ -98,7 +98,7 @@ export default function Faq({ t, lang }) {
                     onClick={() => toggleFaq(index)}
                     style={{
                       width: "100%",
-                      padding: "2rem 2.5rem",
+                      padding: "clamp(1.25rem, 3.5vw, 2rem) clamp(1.2rem, 4vw, 2.5rem)",
                       background: "transparent",
                       border: "none",
                       display: "flex",
@@ -112,7 +112,7 @@ export default function Faq({ t, lang }) {
                     <span
                       style={{
                         fontFamily: "var(--font-body)",
-                        fontSize: "1.1rem",
+                        fontSize: "clamp(0.95rem, 3.5vw, 1.15rem)",
                         fontWeight: 700,
                         color: isOpen ? "var(--accent-gold)" : "#ffffff",
                         transition: "color 0.3s ease"
@@ -151,7 +151,7 @@ export default function Faq({ t, lang }) {
                   >
                     <p
                       style={{
-                        padding: "2rem 2.5rem",
+                        padding: "clamp(1.25rem, 3.5vw, 2rem) clamp(1.2rem, 4vw, 2.5rem)",
                         color: "var(--text-secondary)",
                         fontSize: "0.95rem",
                         lineHeight: "1.6",

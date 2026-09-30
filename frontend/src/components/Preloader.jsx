@@ -6,15 +6,18 @@ export default function Preloader() {
   const [fadeOut, setFadeOut] = useState(false);
 
   useEffect(() => {
-    // Transition preloader out after 2.8 seconds
+    // Shorter duration on mobile for instant snappy UX
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+    const fadeDelay = isMobile ? 1100 : 2200;
+    const destroyDelay = isMobile ? 1600 : 2800;
+
     const loadTimer = setTimeout(() => {
       setFadeOut(true);
-    }, 2800);
+    }, fadeDelay);
 
-    // Completely remove preloader after fade animation completes
     const destroyTimer = setTimeout(() => {
       setLoading(false);
-    }, 3600);
+    }, destroyDelay);
 
     return () => {
       clearTimeout(loadTimer);
@@ -22,15 +25,22 @@ export default function Preloader() {
     };
   }, []);
 
+  const handleDismiss = () => {
+    setFadeOut(true);
+    setTimeout(() => setLoading(false), 400);
+  };
+
   if (!loading) return null;
 
   return (
     <div
       className="preloader-container"
+      onClick={handleDismiss}
       style={{
         opacity: fadeOut ? 0 : 1,
         transform: fadeOut ? "scale(1.05)" : "scale(1)",
-        pointerEvents: fadeOut ? "none" : "all"
+        pointerEvents: fadeOut ? "none" : "all",
+        cursor: "pointer",
       }}
     >
       {/* Grid Lines */}

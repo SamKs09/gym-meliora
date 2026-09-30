@@ -671,7 +671,7 @@ export default function ThreeEquipmentShowcase({ lang = "en" }) {
           style={{
             position: "relative",
             width: "100%",
-            height: "520px",
+            height: "clamp(340px, 48vh, 520px)",
             borderRadius: "16px",
             overflow: "hidden",
             border: "1px solid var(--glass-border)",

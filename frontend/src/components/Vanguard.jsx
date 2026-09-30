@@ -282,6 +282,7 @@ export default function Vanguard({ t, lang }) {
                 <button
                   key={t._id}
                   onClick={() => setActiveTrainer(t)}
+                  className="coach-tab-btn"
                   style={{
                     background: isSelected ? "rgba(197, 168, 128, 0.05)" : "transparent",
                     border: "none",
@@ -352,11 +353,20 @@ export default function Vanguard({ t, lang }) {
         @media (max-width: 991px) {
           .splitscreen-grid {
             grid-template-columns: 1fr !important;
-            gap: 2.5rem !important;
+            gap: 2rem !important;
           }
           .splitscreen-grid .glass-panel {
             height: 480px !important;
-            padding: 3rem 2rem !important;
+            padding: 2.5rem 1.75rem !important;
+          }
+        }
+        @media (max-width: 640px) {
+          .splitscreen-grid .glass-panel {
+            height: clamp(380px, 50vh, 440px) !important;
+            padding: 1.75rem 1.25rem !important;
+          }
+          .coach-tab-btn {
+            padding: 1.25rem 1rem !important;
           }
         }
       `}</style>

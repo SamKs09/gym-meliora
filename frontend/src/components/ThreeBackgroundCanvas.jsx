@@ -26,7 +26,7 @@ export default function ThreeBackgroundCanvas() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 
     // Particle Cloud
-    const particleCount = 450;
+    const particleCount = window.innerWidth < 768 ? 160 : 450;
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
