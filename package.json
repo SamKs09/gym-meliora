@@ -1,0 +1,10 @@
+{
+  "name": "gym-meliora",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix frontend run dev",
+    "build": "cd frontend && npm install && npm run build && cd .. && node -e \"const fs=require('fs'); if(fs.existsSync('./frontend/out')) fs.cpSync('./frontend/out', './out', {recursive: true});\"",
+    "start": "npm --prefix frontend start"
+  }
+}
